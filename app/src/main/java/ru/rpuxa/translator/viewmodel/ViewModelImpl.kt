@@ -15,14 +15,15 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
 
     override fun onCreate() {
         GlobalScope.launch {
-            val updateLanguages = model.loadLanguages()
+            val successfulUpdateLanguages = model.loadLanguages()
             ui {
-                loadingSuccessful.value = updateLanguages
+                loadingSuccessful.value = successfulUpdateLanguages
             }
-            val allPhrases = model.getAllPhrases()
-            ui {
-                if (loadingSuccessful.value == true)
+            if (successfulUpdateLanguages) {
+                val allPhrases = model.getAllPhrases()
+                ui {
                     translatesHistory.value = ArrayList(allPhrases)
+                }
             }
         }
     }
@@ -77,7 +78,6 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
             val value = model.translate(fromLanguage.value!!, toLanguage.value!!, text)
             if (value == null) {
                 ui {
-                    translatedPhrase.value = null
                     translateStatus.value = TranslateStatus.TRANSLATE_ERROR
                 }
             } else {

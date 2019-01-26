@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.activity_translate.*
 import kotlinx.android.synthetic.main.result.*
 import org.jetbrains.anko.support.v4.act
-import org.jetbrains.anko.support.v4.toast
+import org.jetbrains.anko.support.v4.longToast
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.observe
 import ru.rpuxa.translator.observeNotNull
@@ -36,7 +36,7 @@ class ResultFragment : Fragment() {
                 }
                 TranslateStatus.TRANSLATE_ERROR -> {
                     view.visibility = View.GONE
-                    toast(getString(R.string.check_connection))
+                    longToast(getString(R.string.check_connection))
                 }
             }
 
