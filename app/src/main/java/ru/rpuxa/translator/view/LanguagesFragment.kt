@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.languages.*
 import kotlinx.android.synthetic.main.languages.view.*
 import org.jetbrains.anko.startActivityForResult
+import org.jetbrains.anko.support.v4.act
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.observeNotNull
 
@@ -28,20 +29,20 @@ class LanguagesFragment : Fragment() {
             startAnimation()
         }
 
-        ViewModel.fromLanguage.observeNotNull(this) {
-            from_language_textview.text = it.name
+        ViewModel.fromLanguage.observeNotNull(this) { language ->
+            from_language_textview.text = language.name
         }
 
-        ViewModel.toLanguage.observeNotNull(this) {
-            to_language_textview.text = it.name
+        ViewModel.toLanguage.observeNotNull(this) { language ->
+            to_language_textview.text = language.name
         }
 
         from_language_textview.setOnClickListener {
-            activity!!.startActivityForResult<LanguagesListActivity>(TranslateActivity.CHANGE_FROM_LANGUAGE)
+            act.startActivityForResult<LanguagesListActivity>(TranslateActivity.CHANGE_FROM_LANGUAGE)
         }
 
         to_language_textview.setOnClickListener {
-            activity!!.startActivityForResult<LanguagesListActivity>(TranslateActivity.CHANGE_TO_LANGUAGE)
+            act.startActivityForResult<LanguagesListActivity>(TranslateActivity.CHANGE_TO_LANGUAGE)
         }
     }
 

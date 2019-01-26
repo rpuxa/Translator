@@ -3,7 +3,7 @@ package ru.rpuxa.translator.model
 import ru.rpuxa.translator.model.data.Language
 
 interface LanguageManager {
-    suspend fun updateLanguages(): Boolean
+    suspend fun loadLanguages(): Boolean
 
     val allLanguages: List<Language>
 

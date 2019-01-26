@@ -14,6 +14,11 @@ inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline obs
     observe(owner) { observer(it!!) }
 }
 
+fun <T> MutableLiveData<T>.update() {
+    val v = value
+    value = v
+}
+
 val handler = Handler()
 inline fun ui(crossinline run: () -> Unit) {
     handler.post {
@@ -21,4 +26,5 @@ inline fun ui(crossinline run: () -> Unit) {
     }
 }
 
-fun <T> liveData(value: T) = MutableLiveData<T>().apply { this.value = value }
+@Suppress("FunctionName")
+fun <T> MutableLiveData(defaultValue: T) = MutableLiveData<T>().apply { this.value = defaultValue }

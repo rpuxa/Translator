@@ -12,8 +12,10 @@ import ru.rpuxa.translator.model.data.Language
 object YandexTranslator : IYandexTranslator by IYandexTranslator.create()
 
 interface IYandexTranslator {
+
+
     companion object {
-        const val API_KEY = "trnsl.1.1.20190124T145116Z.4dacc51ed78c5230.b65671914c1c9236f6c2884574c856d67d2a9ab8"
+        private const val API_KEY = "trnsl.1.1.20190124T145116Z.4dacc51ed78c5230.b65671914c1c9236f6c2884574c856d67d2a9ab8"
         private const val SITE = "https://translate.yandex.net/api/v1.5/tr.json/"
 
         fun create(): IYandexTranslator {
@@ -25,11 +27,13 @@ interface IYandexTranslator {
         }
     }
 
+
     @GET("getLangs")
     fun getLanguages(
             @Query("ui") ui: String = "en",
             @Query("key") apiKey: String = API_KEY
     ): Call<Languages>
+
 
     @GET("translate")
     fun getTranslate(
@@ -37,6 +41,7 @@ interface IYandexTranslator {
             @Query("lang") language: String,
             @Query("key") apiKey: String = API_KEY
     ): Call<Translate>
+
 
     class Languages {
 
@@ -60,17 +65,8 @@ interface IYandexTranslator {
     class Translate {
 
         @Expose
-        @SerializedName("code")
-        private var _code: Int? = null
-        @Expose
         @SerializedName("text")
         private lateinit var _text: Array<String>
-
-        @Expose
-        @SerializedName("lang")
-        lateinit var language: String
-
-        val code: Int get() = _code!!
 
         val text: String by lazy {
             val result = StringBuilder()

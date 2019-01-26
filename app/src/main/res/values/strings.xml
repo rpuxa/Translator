@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Translator</string>
     <string name="check_connection">Check internet connection</string>
+    <string name="all_languages">All languages</string>
+    <string name="enter_your_text">Enter your text</string>
+    <string name="clear">Clear</string>
+    <string name="translate">Translate</string>
 </resources>

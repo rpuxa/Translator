@@ -2,31 +2,37 @@ package ru.rpuxa.translator.viewmodel
 
 import androidx.lifecycle.LiveData
 import ru.rpuxa.translator.model.data.Language
-import ru.rpuxa.translator.model.data.Phrase
+import ru.rpuxa.translator.model.data.TranslatedPhrase
 
 interface IViewModel {
 
     fun onCreate()
 
-    val fromLanguage: LiveData<Language>
-    fun setFromLanguage(language: Language)
-
-    val toLanguage: LiveData<Language>
-    fun setToLanguage(language: Language)
+    val loadingSuccessful: LiveData<Boolean?>
 
     val allLanguages: List<Language>
 
-    val phrase: LiveData<Phrase?>
+    val fromLanguage: LiveData<Language>
 
-    val translatesHistory: LiveData<List<Language>>
+    fun setFromLanguage(language: Language)
 
-    val isTranslateLoading: LiveData<Boolean>
+    val toLanguage: LiveData<Language>
 
-    val loadingSuccessful: LiveData<Boolean?>
+    fun setToLanguage(language: Language)
+
+    val translatedPhrase: LiveData<TranslatedPhrase>
+
+    val translateStatus: LiveData<TranslateStatus>
+
+    val translatesHistory: LiveData<out List<TranslatedPhrase>>
+
+    fun removeTranslate(phrase: TranslatedPhrase)
 
     fun swapLanguages()
 
-    fun clearField()
+    fun textToTranslateChanged()
 
     fun onTranslate(text: String)
+
+    fun showTranslate(phrase: TranslatedPhrase)
 }

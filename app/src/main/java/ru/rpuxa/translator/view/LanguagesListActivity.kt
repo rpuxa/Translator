@@ -1,6 +1,5 @@
 package ru.rpuxa.translator.view
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -25,8 +24,8 @@ class LanguagesListActivity : AppCompatActivity() {
 
     fun finishWithResult(language: Language) {
         val intent = Intent()
-        intent.putExtra(LanguagesListActivity.ANSWER, language)
-        setResult(Activity.RESULT_OK, intent)
+        intent.putExtra(ANSWER_TAG, language)
+        setResult(RESULT_OK, intent)
         finish()
     }
 
@@ -35,6 +34,6 @@ class LanguagesListActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val ANSWER = "ans"
+        const val ANSWER_TAG = "answer"
     }
 }

@@ -21,6 +21,7 @@ class DataBaseImpl(applicationContext: Context)
         private const val TRANSLATES_COLUMN_TO_LANGUAGE = "tl"
         private const val TRANSLATES_COLUMN_FROM_TEXT = "ft"
         private const val TRANSLATES_COLUMN_TO_TEXT = "tt"
+        private const val TRANSLATES_COLUMN_TIME = "t"
     }
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -29,7 +30,8 @@ class DataBaseImpl(applicationContext: Context)
                 TRANSLATES_COLUMN_FROM_LANGUAGE to INTEGER,
                 TRANSLATES_COLUMN_TO_LANGUAGE to INTEGER,
                 TRANSLATES_COLUMN_FROM_TEXT to TEXT,
-                TRANSLATES_COLUMN_TO_TEXT to TEXT
+                TRANSLATES_COLUMN_TO_TEXT to TEXT,
+                TRANSLATES_COLUMN_TIME to INTEGER
         )
     }
 
@@ -38,27 +40,28 @@ class DataBaseImpl(applicationContext: Context)
     }
 
     override fun savePhrase(phrase: TranslatedPhrase) {
-        writableDatabase.insert(TRANSLATES_TABLE_NAME,
+        writableDatabase.replace(TRANSLATES_TABLE_NAME,
                 TRANSLATES_COLUMN_ID to phrase.id,
                 TRANSLATES_COLUMN_FROM_LANGUAGE to phrase.from.language.code,
                 TRANSLATES_COLUMN_TO_LANGUAGE to phrase.to.language.code,
                 TRANSLATES_COLUMN_FROM_TEXT to phrase.from.text,
-                TRANSLATES_COLUMN_TO_TEXT to phrase.to.text
+                TRANSLATES_COLUMN_TO_TEXT to phrase.to.text,
+                TRANSLATES_COLUMN_TIME to phrase.createdTime
         )
     }
 
     override fun removePhrase(phrase: TranslatedPhrase) {
-        writableDatabase.delete(TRANSLATES_TABLE_NAME, "", TRANSLATES_COLUMN_ID to phrase.id)
+        writableDatabase.delete(TRANSLATES_TABLE_NAME, "$TRANSLATES_COLUMN_ID = ${phrase.id}")
     }
 
     override fun getAllPhrases(manager: LanguageManager): List<TranslatedPhrase> {
-        return writableDatabase.select(TRANSLATES_TABLE_NAME).parseList(rowParser { _: Int, fromLanguage: String, toLanguage: String,
-                                                                                     fromText: String, toText: String ->
+        return writableDatabase.select(TRANSLATES_TABLE_NAME).parseList(rowParser { _: Int, fromLanguage: String, toLanguage: String, fromText: String, toText: String, time: Int ->
             TranslatedPhrase(
                     Phrase(manager.getLanguageByCode(fromLanguage), fromText),
-                    Phrase(manager.getLanguageByCode(toLanguage), toText)
+                    Phrase(manager.getLanguageByCode(toLanguage), toText),
+                    time
             )
-        })
+        }).sortedBy { it.createdTime }
     }
 
     private fun clear(db: SQLiteDatabase) {

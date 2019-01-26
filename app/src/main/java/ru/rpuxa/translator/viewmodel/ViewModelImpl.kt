@@ -1,40 +1,35 @@
 package ru.rpuxa.translator.viewmodel
 
-import android.app.Application
-import android.content.res.Resources
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.*
-import ru.rpuxa.translator.R
-import ru.rpuxa.translator.liveData
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import ru.rpuxa.translator.MutableLiveData
 import ru.rpuxa.translator.model.IModel
-import ru.rpuxa.translator.model.Model
 import ru.rpuxa.translator.model.data.Language
 import ru.rpuxa.translator.model.data.Phrase
-import ru.rpuxa.translator.model.database.DataBaseImpl
+import ru.rpuxa.translator.model.data.TranslatedPhrase
 import ru.rpuxa.translator.ui
+import ru.rpuxa.translator.update
 
-class ViewModelImpl(private val model: IModel, private val res: Resources) : IViewModel {
+class ViewModelImpl(private val model: IModel) : IViewModel {
 
     override fun onCreate() {
-        model.onCreate()
-
-        asyncRequest(object : AsyncRequest<Boolean>(5_000) {
-            override suspend fun getValue(): Boolean {
-                return model.updateLanguages()
+        GlobalScope.launch {
+            val updateLanguages = model.loadLanguages()
+            ui {
+                loadingSuccessful.value = updateLanguages
             }
-
-            override fun onValueGotten(value: Boolean) {
-                loadingSuccessful.value = value
+            val allPhrases = model.getAllPhrases()
+            ui {
+                if (loadingSuccessful.value == true)
+                    translatesHistory.value = ArrayList(allPhrases)
             }
-
-            override fun onTimeout() {
-                loadingSuccessful.value = false
-            }
-        })
+        }
     }
 
-    override val fromLanguage = liveData(Language.RUSSIAN)
+    override val fromLanguage by lazy {
+        MutableLiveData(allLanguages.find { it.code == "ru" }!!)
+    }
 
     override fun setFromLanguage(language: Language) {
         if (language == toLanguage.value) {
@@ -44,7 +39,9 @@ class ViewModelImpl(private val model: IModel, private val res: Resources) : IVi
         }
     }
 
-    override val toLanguage = liveData(Language.ENGLISH)
+    override val toLanguage by lazy {
+        MutableLiveData(allLanguages.find { it.code == "en" }!!)
+    }
 
     override fun setToLanguage(language: Language) {
         if (language == fromLanguage.value) {
@@ -54,16 +51,15 @@ class ViewModelImpl(private val model: IModel, private val res: Resources) : IVi
         }
     }
 
-    override val translatesHistory: LiveData<List<Language>> =
-            MutableLiveData()
+    override val translatesHistory = MutableLiveData(ArrayList<TranslatedPhrase>())
 
     override val allLanguages: List<Language> get() = model.allLanguages
 
-    override val isTranslateLoading = liveData(false)
+    override val translatedPhrase = MutableLiveData<TranslatedPhrase>()
 
-    override val phrase = liveData<Phrase?>(null)
+    override val translateStatus = MutableLiveData(TranslateStatus.WAITING_TRANSLATE)
 
-    override val loadingSuccessful = liveData<Boolean?>(null)
+    override val loadingSuccessful = MutableLiveData<Boolean?>(null)
 
     override fun swapLanguages() {
         val tmp = fromLanguage.value
@@ -73,69 +69,44 @@ class ViewModelImpl(private val model: IModel, private val res: Resources) : IVi
 
     override fun onTranslate(text: String) {
         if (text.isEmpty()) {
-            phrase.value = null
             return
         }
-        isTranslateLoading.value = true
-        asyncRequest(object : AsyncRequest<Phrase?>() {
-            override suspend fun getValue(): Phrase? {
-                return model.translate(fromLanguage.value!!, toLanguage.value!!, text)
-            }
+        translateStatus.value = TranslateStatus.TRANSLATING
 
-            override fun onValueGotten(value: Phrase?) {
-                phrase.value = value
-                isTranslateLoading.value = false
-                if (value == null) {
-                    sendToast(res.getString(R.string.check_connection))
-                }
-            }
-
-            override fun onTimeout() {
-                sendToast(res.getString(R.string.check_connection))
-                phrase.value = null
-                isTranslateLoading.value = false
-            }
-        })
-    }
-
-    override fun clearField() {
-        phrase.value = null
-        isTranslateLoading.value = false
-    }
-
-    private fun sendToast(msg: String, isShort: Boolean = true) {
-
-    }
-
-    private fun <T> asyncRequest(request: AsyncRequest<T>) {
         GlobalScope.launch {
-            var wait: Job? = null
-            val req = launch {
-                val answer = request.getValue()
-                wait?.cancel()
-                if (isActive) {
-                    ui {
-                        request.onValueGotten(answer)
-                    }
-                }
-            }
-            wait = launch {
-                delay(request.timeout)
-                req.cancel()
+            val value = model.translate(fromLanguage.value!!, toLanguage.value!!, text)
+            if (value == null) {
                 ui {
-                    request.onTimeout()
+                    translatedPhrase.value = null
+                    translateStatus.value = TranslateStatus.TRANSLATE_ERROR
                 }
+            } else {
+                val phrase = TranslatedPhrase(Phrase(fromLanguage.value!!, text), value)
+                ui {
+                    translatedPhrase.value = phrase
+                    translateStatus.value = TranslateStatus.SHOW_TRANSLATE_RESULT
+                    translatesHistory.value!!.remove(phrase)
+                    translatesHistory.value!!.add(phrase)
+                    translatesHistory.update()
+
+                }
+                model.addPhrase(phrase)
             }
         }
     }
 
-    private abstract class AsyncRequest<T>(val timeout: Long = 3_000) {
-        abstract suspend fun getValue(): T
+    override fun removeTranslate(phrase: TranslatedPhrase) {
+        translatesHistory.value!!.remove(phrase)
+        translatesHistory.update()
+        GlobalScope.launch { model.removePhrase(phrase) }
+    }
 
-        open fun onValueGotten(value: T) {
-        }
+    override fun textToTranslateChanged() {
+        translateStatus.value = TranslateStatus.WAITING_TRANSLATE
+    }
 
-        open fun onTimeout() {
-        }
+    override fun showTranslate(phrase: TranslatedPhrase) {
+        translatedPhrase.value = phrase
+        translateStatus.value = TranslateStatus.SHOW_TRANSLATE_RESULT
     }
 }

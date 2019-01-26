@@ -8,10 +8,6 @@ import ru.rpuxa.translator.model.server.YandexTranslator
 
 class Model(private val dataBase: DataBase) : IModel {
 
-    override fun onCreate() {
-        allPhrases = dataBase.getAllPhrases(this)
-    }
-
     override suspend fun translate(fromLanguage: Language, toLanguage: Language, text: String): Phrase? {
         try {
             val response = YandexTranslator.getTranslate(
@@ -35,11 +31,11 @@ class Model(private val dataBase: DataBase) : IModel {
         dataBase.removePhrase(phrase)
     }
 
-    override lateinit var allPhrases: List<TranslatedPhrase>
+    override suspend fun getAllPhrases(): List<TranslatedPhrase> = dataBase.getAllPhrases(this)
 
     override var allLanguages: List<Language> = listOf(Language.NULL)
 
-    override suspend fun updateLanguages(): Boolean {
+    override suspend fun loadLanguages(): Boolean {
         try {
             val response = YandexTranslator.getLanguages().execute()
             if (response.isSuccessful) {

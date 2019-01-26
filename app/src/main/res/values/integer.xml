@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="language_swap_animation_duration">400</integer>
-    <integer name="icon_size">32</integer>
 </resources>

@@ -21,6 +21,6 @@ class App : Application() {
         super.onCreate()
         dataBase = DataBaseImpl(this)
         model = Model(dataBase)
-        viewModel = ViewModelImpl(model, resources)
+        viewModel = ViewModelImpl(model)
     }
 }
