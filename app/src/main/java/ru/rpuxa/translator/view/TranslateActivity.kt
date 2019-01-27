@@ -13,7 +13,9 @@ import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.Language
 import ru.rpuxa.translator.viewmodel.TranslateStatus
 
-
+/**
+ * Главное активити
+ */
 class TranslateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +29,7 @@ class TranslateActivity : AppCompatActivity() {
 
         clear_button.setOnClickListener {
             if (ViewModel.translateStatus.value != TranslateStatus.TRANSLATING)
-                translate_from_text.setText("")
+                translate_from_text.text.clear()
         }
 
         translate_from_text.addTextChangedListener(object : TextWatcher {

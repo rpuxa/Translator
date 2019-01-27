@@ -13,5 +13,8 @@ abstract class DataBase(context: Context, name: String, version: Int) : SQLiteOp
 
     abstract fun getAllPhrases(manager: LanguageManager): List<TranslatedPhrase>
 
+    /**
+     * Полная очистка базы данных
+     */
     abstract fun clear()
 }

@@ -17,6 +17,9 @@ import org.jetbrains.anko.support.v4.act
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.observeNotNull
 
+/**
+ * Фрагмент показывающий направление перевода
+ */
 class LanguagesFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =

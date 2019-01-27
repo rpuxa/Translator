@@ -1,5 +1,6 @@
 package ru.rpuxa.translator.model
 
+import ru.rpuxa.translator.await
 import ru.rpuxa.translator.model.data.Language
 import ru.rpuxa.translator.model.data.Phrase
 import ru.rpuxa.translator.model.data.TranslatedPhrase
@@ -13,7 +14,7 @@ class Model(private val dataBase: DataBase) : IModel {
             val response = YandexTranslator.getTranslate(
                     text,
                     "${fromLanguage.code}-${toLanguage.code}"
-            ).execute()
+            ).await()
             if (response.isSuccessful) {
                 return Phrase(toLanguage, response.body().text)
             }
@@ -37,7 +38,7 @@ class Model(private val dataBase: DataBase) : IModel {
 
     override suspend fun loadLanguages(): Boolean {
         try {
-            val response = YandexTranslator.getLanguages().execute()
+            val response = YandexTranslator.getLanguages().await()
             if (response.isSuccessful) {
                 allLanguages = response.body().toLanguageList().sortedBy { it.name }
                 return true

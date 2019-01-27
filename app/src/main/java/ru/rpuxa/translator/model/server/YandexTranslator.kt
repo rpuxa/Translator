@@ -9,6 +9,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.rpuxa.translator.model.data.Language
 
+/**
+ * Объект для обращения к серверу
+ */
 object YandexTranslator : IYandexTranslator by IYandexTranslator.create()
 
 interface IYandexTranslator {

@@ -7,6 +7,9 @@ import org.jetbrains.anko.startActivity
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.observe
 
+/**
+ * Стартовое активити. Показывается во время загрузки
+ */
 class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,5 +27,4 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
     }
-
 }

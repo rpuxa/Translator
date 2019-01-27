@@ -9,6 +9,10 @@ import kotlinx.android.synthetic.main.activity_languages_list.*
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.Language
 
+/**
+ * Активность для выбора языка из списка доступных.
+ * Следует вызывать как startActivityForResult
+ */
 class LanguagesListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

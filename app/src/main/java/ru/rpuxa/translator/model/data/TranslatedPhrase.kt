@@ -1,5 +1,9 @@
 package ru.rpuxa.translator.model.data
 
+/**
+ * Класс хранящий фразу [from] и ее перевод [to]. Так же хранит время создания [createdTime]
+ * для сортировки по порядку перевода, а [id] для ключа в базе данных
+ */
 data class TranslatedPhrase(
         val from: Phrase,
         val to: Phrase,

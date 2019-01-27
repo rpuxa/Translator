@@ -10,6 +10,9 @@ import kotlinx.android.synthetic.main.language_item.view.*
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.Language
 
+/**
+ * Адаптер для списка всех языков
+ */
 class LanguagesAdapter(private val activity: LanguagesListActivity) :
         ListAdapter<Language, LanguagesAdapter.LanguageViewHolder>(Diff) {
     class LanguageViewHolder(view: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(view) {

@@ -37,6 +37,7 @@ class ResultFragment : Fragment() {
                 TranslateStatus.TRANSLATE_ERROR -> {
                     view.visibility = View.GONE
                     longToast(getString(R.string.check_connection))
+                    ViewModel.removeTranslateError()
                 }
             }
 

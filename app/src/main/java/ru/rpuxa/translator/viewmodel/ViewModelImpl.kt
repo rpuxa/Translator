@@ -8,7 +8,6 @@ import ru.rpuxa.translator.model.IModel
 import ru.rpuxa.translator.model.data.Language
 import ru.rpuxa.translator.model.data.Phrase
 import ru.rpuxa.translator.model.data.TranslatedPhrase
-import ru.rpuxa.translator.ui
 import ru.rpuxa.translator.update
 
 class ViewModelImpl(private val model: IModel) : IViewModel {
@@ -16,14 +15,10 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
     override fun onCreate() {
         GlobalScope.launch {
             val successfulUpdateLanguages = model.loadLanguages()
-            ui {
-                loadingSuccessful.value = successfulUpdateLanguages
-            }
+            loadingSuccessful.postValue(successfulUpdateLanguages)
             if (successfulUpdateLanguages) {
                 val allPhrases = model.getAllPhrases()
-                ui {
-                    translatesHistory.value = ArrayList(allPhrases)
-                }
+                translatesHistory.postValue(ArrayList(allPhrases))
             }
         }
     }
@@ -77,22 +72,21 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
         GlobalScope.launch {
             val value = model.translate(fromLanguage.value!!, toLanguage.value!!, text)
             if (value == null) {
-                ui {
-                    translateStatus.value = TranslateStatus.TRANSLATE_ERROR
-                }
-            } else {
-                val phrase = TranslatedPhrase(Phrase(fromLanguage.value!!, text), value)
-                ui {
-                    translatedPhrase.value = phrase
-                    translateStatus.value = TranslateStatus.SHOW_TRANSLATE_RESULT
-                    translatesHistory.value!!.remove(phrase)
-                    translatesHistory.value!!.add(phrase)
-                    translatesHistory.update()
-
-                }
-                model.addPhrase(phrase)
+                translateStatus.postValue(TranslateStatus.TRANSLATE_ERROR)
+                return@launch
             }
+            val phrase = TranslatedPhrase(Phrase(fromLanguage.value!!, text), value)
+            translatedPhrase.postValue(phrase)
+            translateStatus.postValue(TranslateStatus.SHOW_TRANSLATE_RESULT)
+            translatesHistory.value!!.remove(phrase)
+            translatesHistory.value!!.add(phrase)
+            translatesHistory.update()
+            model.addPhrase(phrase)
         }
+    }
+
+    override fun removeTranslateError() {
+        translateStatus.value = TranslateStatus.WAITING_TRANSLATE
     }
 
     override fun removeTranslate(phrase: TranslatedPhrase) {

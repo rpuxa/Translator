@@ -15,6 +15,9 @@ import ru.rpuxa.translator.observeNotNull
 import ru.rpuxa.translator.viewmodel.TranslateStatus
 
 
+/**
+ * Фрагмент содержащий историю переводов
+ */
 class HistoryFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
@@ -28,12 +31,7 @@ class HistoryFragment : Fragment() {
         history_recycler_view.layoutManager = manager
         view.visibility = View.GONE
 
-        ViewModel.translatesHistory.observeNotNull(this) { list ->
-            updateVisibility(view, list.isEmpty(), ViewModel.translateStatus.value!!)
-            adapter.submitList(list.reversed())
-        }
-
-        val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        val callback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
                 return false
             }
@@ -44,17 +42,26 @@ class HistoryFragment : Fragment() {
 
         }
 
+        //разделение между элементами
+        ItemTouchHelper(callback).attachToRecyclerView(history_recycler_view)
+
         ViewModel.translateStatus.observeNotNull(this) { status ->
             updateVisibility(view, adapter.currentList.isEmpty(), status)
         }
 
-        ItemTouchHelper(simpleItemTouchCallback).attachToRecyclerView(history_recycler_view)
+        ViewModel.translatesHistory.observeNotNull(this) { list ->
+            updateVisibility(view, list.isEmpty(), ViewModel.translateStatus.value!!)
+            adapter.submitList(list.reversed())
+        }
     }
 
-    private fun updateVisibility(view: View, isEmpty: Boolean, translateStatus: TranslateStatus) {
+    /**
+     * Обновляет видимость фрагмента в зависимотсти от содержимого списка [isEmpty] и статуса перевода [status]
+     */
+    private fun updateVisibility(view: View, isEmpty: Boolean, status: TranslateStatus) {
         view.visibility = if (
-                translateStatus == TranslateStatus.SHOW_TRANSLATE_RESULT ||
-                translateStatus == TranslateStatus.TRANSLATING ||
+                status == TranslateStatus.SHOW_TRANSLATE_RESULT ||
+                status == TranslateStatus.TRANSLATING ||
                 isEmpty
         ) {
             View.GONE

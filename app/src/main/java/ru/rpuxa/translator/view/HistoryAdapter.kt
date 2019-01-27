@@ -12,6 +12,9 @@ import kotlinx.android.synthetic.main.history_item.view.*
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.TranslatedPhrase
 
+/**
+ * Адаптер отвечающий за расположение истории переводов
+ */
 class HistoryAdapter : ListAdapter<TranslatedPhrase, HistoryAdapter.HistoryViewHolder>(Diff) {
     class HistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val fromText: TextView = view.history_from_text
