@@ -11,10 +11,14 @@ import kotlinx.android.synthetic.main.result.*
 import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.longToast
 import ru.rpuxa.translator.R
+import ru.rpuxa.translator.model.data.TranslateStatus
 import ru.rpuxa.translator.observe
 import ru.rpuxa.translator.observeNotNull
-import ru.rpuxa.translator.viewmodel.TranslateStatus
 
+
+/**
+ * Фрагмент для показа результата перевода
+ */
 class ResultFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =

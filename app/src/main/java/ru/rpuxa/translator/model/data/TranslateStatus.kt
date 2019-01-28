@@ -1,4 +1,4 @@
-package ru.rpuxa.translator.viewmodel
+package ru.rpuxa.translator.model.data
 
 /**
  * Показывается состояние перевода.

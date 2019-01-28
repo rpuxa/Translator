@@ -7,6 +7,7 @@ import ru.rpuxa.translator.MutableLiveData
 import ru.rpuxa.translator.model.IModel
 import ru.rpuxa.translator.model.data.Language
 import ru.rpuxa.translator.model.data.Phrase
+import ru.rpuxa.translator.model.data.TranslateStatus
 import ru.rpuxa.translator.model.data.TranslatedPhrase
 import ru.rpuxa.translator.update
 
@@ -14,10 +15,10 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
 
     override fun onCreate() {
         GlobalScope.launch {
-            val successfulUpdateLanguages = model.loadLanguages()
+            val successfulUpdateLanguages = model.languageManager.loadLanguages()
             loadingSuccessful.postValue(successfulUpdateLanguages)
             if (successfulUpdateLanguages) {
-                val allPhrases = model.getAllPhrases()
+                val allPhrases = model.dataBase.getAllPhrases()
                 translatesHistory.postValue(ArrayList(allPhrases))
             }
         }
@@ -49,7 +50,7 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
 
     override val translatesHistory = MutableLiveData(ArrayList<TranslatedPhrase>())
 
-    override val allLanguages: List<Language> get() = model.allLanguages
+    override val allLanguages: List<Language> get() = model.languageManager.allLanguages
 
     override val translatedPhrase = MutableLiveData<TranslatedPhrase>()
 
@@ -64,24 +65,23 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
     }
 
     override fun onTranslate(text: String) {
-        if (text.isEmpty()) {
+        if (text.isBlank()) {
             return
         }
         translateStatus.value = TranslateStatus.TRANSLATING
 
         GlobalScope.launch {
-            val value = model.translate(fromLanguage.value!!, toLanguage.value!!, text)
-            if (value == null) {
+            val phrase = model.translator.translate(Phrase(fromLanguage.value!!, text), toLanguage.value!!)
+            if (phrase == null) {
                 translateStatus.postValue(TranslateStatus.TRANSLATE_ERROR)
                 return@launch
             }
-            val phrase = TranslatedPhrase(Phrase(fromLanguage.value!!, text), value)
             translatedPhrase.postValue(phrase)
             translateStatus.postValue(TranslateStatus.SHOW_TRANSLATE_RESULT)
             translatesHistory.value!!.remove(phrase)
             translatesHistory.value!!.add(phrase)
             translatesHistory.update()
-            model.addPhrase(phrase)
+            model.dataBase.savePhrase(phrase)
         }
     }
 
@@ -92,7 +92,7 @@ class ViewModelImpl(private val model: IModel) : IViewModel {
     override fun removeTranslate(phrase: TranslatedPhrase) {
         translatesHistory.value!!.remove(phrase)
         translatesHistory.update()
-        GlobalScope.launch { model.removePhrase(phrase) }
+        GlobalScope.launch { model.dataBase.removePhrase(phrase) }
     }
 
     override fun textToTranslateChanged() {

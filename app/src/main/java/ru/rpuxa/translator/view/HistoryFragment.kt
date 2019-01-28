@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.history_fragment.*
 import ru.rpuxa.translator.R
+import ru.rpuxa.translator.model.data.TranslateStatus
 import ru.rpuxa.translator.observeNotNull
-import ru.rpuxa.translator.viewmodel.TranslateStatus
 
 
 /**
@@ -42,7 +42,6 @@ class HistoryFragment : Fragment() {
 
         }
 
-        //разделение между элементами
         ItemTouchHelper(callback).attachToRecyclerView(history_recycler_view)
 
         ViewModel.translateStatus.observeNotNull(this) { status ->

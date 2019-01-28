@@ -1,4 +1,4 @@
-package ru.rpuxa.translator.model
+package ru.rpuxa.translator.model.languages
 
 import ru.rpuxa.translator.model.data.Language
 

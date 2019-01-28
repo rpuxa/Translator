@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_translate.*
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.Language
-import ru.rpuxa.translator.viewmodel.TranslateStatus
+import ru.rpuxa.translator.model.data.TranslateStatus
 
 /**
  * Главное активити

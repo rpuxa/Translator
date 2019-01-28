@@ -2,13 +2,18 @@ package ru.rpuxa.translator.model.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import org.jetbrains.anko.db.*
-import ru.rpuxa.translator.model.LanguageManager
 import ru.rpuxa.translator.model.data.Phrase
 import ru.rpuxa.translator.model.data.TranslatedPhrase
+import ru.rpuxa.translator.model.languages.LanguageManager
 
-class DataBaseImpl(applicationContext: Context)
-    : DataBase(applicationContext, DATABASE_NAME, DATABASE_VERSION) {
+
+@Deprecated("Use [MyRoomDataBase] instead")
+class SQLiteDataBase(
+        applicationContext: Context,
+        private val manager: LanguageManager
+) : SQLiteOpenHelper(applicationContext, DATABASE_NAME, null, DATABASE_VERSION), DataBase {
     companion object {
         private const val DATABASE_VERSION = 1
         private const val DATABASE_NAME = "translator.db"
@@ -39,7 +44,7 @@ class DataBaseImpl(applicationContext: Context)
         clear(db)
     }
 
-    override fun savePhrase(phrase: TranslatedPhrase) {
+    override suspend fun savePhrase(phrase: TranslatedPhrase) {
         writableDatabase.replace(TRANSLATES_TABLE_NAME,
                 TRANSLATES_COLUMN_ID to phrase.id,
                 TRANSLATES_COLUMN_FROM_LANGUAGE to phrase.from.language.code,
@@ -50,11 +55,11 @@ class DataBaseImpl(applicationContext: Context)
         )
     }
 
-    override fun removePhrase(phrase: TranslatedPhrase) {
+    override suspend fun removePhrase(phrase: TranslatedPhrase) {
         writableDatabase.delete(TRANSLATES_TABLE_NAME, "$TRANSLATES_COLUMN_ID = ${phrase.id}")
     }
 
-    override fun getAllPhrases(manager: LanguageManager): List<TranslatedPhrase> {
+    override suspend fun getAllPhrases(): List<TranslatedPhrase> {
         return writableDatabase.select(TRANSLATES_TABLE_NAME).parseList(rowParser { _: Int, fromLanguage: String, toLanguage: String, fromText: String, toText: String, time: Int ->
             TranslatedPhrase(
                     Phrase(manager.getLanguageByCode(fromLanguage), fromText),
@@ -69,7 +74,7 @@ class DataBaseImpl(applicationContext: Context)
         onCreate(db)
     }
 
-    override fun clear() {
+    override suspend fun clear() {
         clear(writableDatabase)
     }
 }

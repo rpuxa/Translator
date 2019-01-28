@@ -1,32 +1,17 @@
 package ru.rpuxa.translator.model
 
-import ru.rpuxa.translator.model.data.Language
-import ru.rpuxa.translator.model.data.Phrase
-import ru.rpuxa.translator.model.data.TranslatedPhrase
+import ru.rpuxa.translator.model.database.DataBase
+import ru.rpuxa.translator.model.languages.LanguageManager
+import ru.rpuxa.translator.model.server.ServerTranslator
 
 /**
  * API слоя Model из шаблона проектирования MVVM
  */
-interface IModel : LanguageManager {
+interface IModel {
 
-    /**
-     * Запрашивает перевод текста [text] с одного языка [fromLanguage] на другой [toLanguage].
-     * Возвращает null в случае, если произошла какая-либо ошибка
-     */
-    suspend fun translate(fromLanguage: Language, toLanguage: Language, text: String): Phrase?
+    val translator: ServerTranslator
 
-    /**
-     * Добавление фразы в базу данных
-     */
-    suspend fun addPhrase(phrase: TranslatedPhrase)
+    val dataBase: DataBase
 
-    /**
-     * Удаление фразы из базы данных
-     */
-    suspend fun removePhrase(phrase: TranslatedPhrase)
-
-    /**
-     * Получение всех фраз из базы данных
-     */
-    suspend fun getAllPhrases(): List<TranslatedPhrase>
+    val languageManager: LanguageManager
 }

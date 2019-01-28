@@ -2,6 +2,7 @@ package ru.rpuxa.translator.viewmodel
 
 import androidx.lifecycle.LiveData
 import ru.rpuxa.translator.model.data.Language
+import ru.rpuxa.translator.model.data.TranslateStatus
 import ru.rpuxa.translator.model.data.TranslatedPhrase
 
 
