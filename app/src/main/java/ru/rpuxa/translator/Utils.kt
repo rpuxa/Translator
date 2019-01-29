@@ -1,10 +1,10 @@
 package ru.rpuxa.translator
 
 import android.os.Looper
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.functions.BiFunction
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +19,13 @@ inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: 
 inline fun <T> LiveData<T>.observeNotNull(owner: LifecycleOwner, crossinline observer: (T) -> Unit) {
     observe(owner) { observer(it!!) }
 }
+
+fun <T> LiveData<T>.toObservable(owner: LifecycleOwner): Observable<T> {
+    return Observable.fromPublisher(LiveDataReactiveStreams.toPublisher(owner, this))
+}
+
+fun <T1, T2, R> Pair<ObservableSource<out T1>, ObservableSource<out T2>>.combineLatest(function: (T1, T2) -> R): Observable<R> =
+        Observable.combineLatest(first, second, BiFunction<T1, T2, R> { t1: T1, t2: T2 -> function(t1, t2) })
 
 
 /**

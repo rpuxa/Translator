@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ViewSwitcher
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.activity_translate.*
 import kotlinx.android.synthetic.main.result.*
-import org.jetbrains.anko.support.v4.act
 import org.jetbrains.anko.support.v4.longToast
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.TranslateStatus
@@ -35,7 +33,6 @@ class ResultFragment : Fragment() {
                     loading(true)
                 }
                 TranslateStatus.SHOW_TRANSLATE_RESULT -> {
-                    act.translate_from_language.visibility = View.VISIBLE
                     loading(false)
                 }
                 TranslateStatus.TRANSLATE_ERROR -> {
@@ -44,15 +41,9 @@ class ResultFragment : Fragment() {
                     ViewModel.removeTranslateError()
                 }
             }
-
-            if (status != TranslateStatus.SHOW_TRANSLATE_RESULT) {
-                act.translate_from_language.visibility = View.GONE
-            }
         }
 
         ViewModel.translatedPhrase.observe(this) { phrase ->
-            act.translate_from_language.text = phrase?.from?.language?.name
-            act.translate_from_text.setText(phrase?.from?.text)
             result_language.text = phrase?.to?.language?.name
             result_text.text = phrase?.to?.text
         }
