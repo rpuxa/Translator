@@ -1,4 +1,4 @@
-package ru.rpuxa.translator.view
+package ru.rpuxa.translator.view.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.observe
+import ru.rpuxa.translator.view.ViewModel
 
 /**
  * Стартовое активити. Показывается во время загрузки

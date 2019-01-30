@@ -1,4 +1,4 @@
-package ru.rpuxa.translator.view
+package ru.rpuxa.translator.view.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.TranslateStatus
 import ru.rpuxa.translator.observe
 import ru.rpuxa.translator.observeNotNull
+import ru.rpuxa.translator.view.ViewModel
 
 
 /**

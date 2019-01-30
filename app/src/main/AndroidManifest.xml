@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.SplashActivity"
+        <activity
+            android:name=".view.activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +25,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.LanguagesListActivity" />
-        <activity android:name=".view.TranslateActivity" />
+        <activity android:name=".view.activities.LanguagesListActivity" />
+        <activity android:name=".view.activities.TranslateActivity" />
 
     </application>
 

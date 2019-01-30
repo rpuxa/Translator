@@ -1,4 +1,4 @@
-package ru.rpuxa.translator.view
+package ru.rpuxa.translator.view.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.history_item.view.*
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.TranslatedPhrase
+import ru.rpuxa.translator.view.ViewModel
 
 /**
  * Адаптер отвечающий за расположение истории переводов

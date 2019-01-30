@@ -37,7 +37,10 @@ abstract class MyRoomDataBase : RoomDatabase(), DataBase {
     }
 
     override suspend fun getAllPhrases(): List<TranslatedPhrase> {
-        return translateItemDao().getAll().map { it.toTranslatePhrase(manager) }
+        return translateItemDao()
+                .getAll()
+                .map { it.toTranslatePhrase(manager) }
+                .sortedBy { it.createdTime }
     }
 
     override suspend fun clear() {

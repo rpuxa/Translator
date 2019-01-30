@@ -1,4 +1,4 @@
-package ru.rpuxa.translator.view
+package ru.rpuxa.translator.view.fragments
 
 import android.animation.ValueAnimator
 import android.os.Bundle
@@ -16,6 +16,9 @@ import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.support.v4.act
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.observeNotNull
+import ru.rpuxa.translator.view.ViewModel
+import ru.rpuxa.translator.view.activities.LanguagesListActivity
+import ru.rpuxa.translator.view.activities.TranslateActivity
 
 /**
  * Фрагмент показывающий направление перевода

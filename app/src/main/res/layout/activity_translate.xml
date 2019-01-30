@@ -7,16 +7,13 @@
     android:background="@color/light_gray"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".view.TranslateActivity">
+    tools:context=".view.activities.TranslateActivity">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardCornerRadius="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,27 +22,19 @@
 
             <fragment
                 android:id="@+id/fragment"
-                android:name="ru.rpuxa.translator.view.LanguagesFragment"
+                android:name="ru.rpuxa.translator.view.fragments.LanguagesFragment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="wrap_content" />
 
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:background="@color/gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment" />
+                android:background="@color/gray" />
 
             <fragment
                 android:id="@+id/fragment4"
-                android:name="ru.rpuxa.translator.view.EnterFragment"
+                android:name="ru.rpuxa.translator.view.fragments.EnterFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
@@ -54,28 +43,18 @@
 
     <fragment
         android:id="@+id/fragment2"
-        android:name="ru.rpuxa.translator.view.ResultFragment"
+        android:name="ru.rpuxa.translator.view.fragments.ResultFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        android:layout_marginEnd="8dp" />
 
     <fragment
         android:id="@+id/fragment3"
-        android:name="ru.rpuxa.translator.view.HistoryFragment"
+        android:name="ru.rpuxa.translator.view.fragments.HistoryFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment2" />
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package ru.rpuxa.translator.view
+package ru.rpuxa.translator.view.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import kotlinx.android.synthetic.main.language_item.view.*
 import ru.rpuxa.translator.R
 import ru.rpuxa.translator.model.data.Language
+import ru.rpuxa.translator.view.activities.LanguagesListActivity
 
 /**
  * Адаптер для списка всех языков
