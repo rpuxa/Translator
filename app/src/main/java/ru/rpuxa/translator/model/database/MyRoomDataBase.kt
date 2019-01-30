@@ -69,7 +69,7 @@ abstract class MyRoomDataBase : RoomDatabase(), DataBase {
 class TranslatePhraseItem(
         @PrimaryKey
         val id: Int,
-        val createdTime: Int,
+        val createdTime: Long,
         val fromText: String,
         val toText: String,
         val fromLanguageCode: String,

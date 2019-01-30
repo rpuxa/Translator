@@ -6,7 +6,7 @@ import ru.rpuxa.translator.model.server.ServerTranslator
 class LanguageManagerImpl(private val server: ServerTranslator) : LanguageManager {
 
     override suspend fun loadLanguages(): Boolean {
-        allLanguages = server.getLanguages() ?: return false
+        allLanguages = server.getLanguages()?.sortedBy { it.name } ?: return false
         return true
     }
 

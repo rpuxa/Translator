@@ -7,7 +7,7 @@ package ru.rpuxa.translator.model.data
 data class TranslatedPhrase(
         val from: Phrase,
         val to: Phrase,
-        val createdTime: Int = System.currentTimeMillis().toInt()
+        val createdTime: Long = System.currentTimeMillis()
 ) {
     val id: Int = hashCode()
 

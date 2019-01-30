@@ -60,7 +60,7 @@ class SQLiteDataBase(
     }
 
     override suspend fun getAllPhrases(): List<TranslatedPhrase> {
-        return writableDatabase.select(TRANSLATES_TABLE_NAME).parseList(rowParser { _: Int, fromLanguage: String, toLanguage: String, fromText: String, toText: String, time: Int ->
+        return writableDatabase.select(TRANSLATES_TABLE_NAME).parseList(rowParser { _: Int, fromLanguage: String, toLanguage: String, fromText: String, toText: String, time: Long ->
             TranslatedPhrase(
                     Phrase(manager.getLanguageByCode(fromLanguage), fromText),
                     Phrase(manager.getLanguageByCode(toLanguage), toText),
